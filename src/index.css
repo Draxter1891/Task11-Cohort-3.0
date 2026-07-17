@@ -1,0 +1,34 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: "clash";
+  src: url("assets/fonts/Clash-Display.woff2");
+}
+@font-face {
+  font-family: "cabinet";
+  src: url("assets/fonts/Cabinet-Grotesk.woff2");
+}
+@font-face {
+  font-family: "dm";
+  src: url("assets/fonts/Dm-sans.woff2");
+}
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
