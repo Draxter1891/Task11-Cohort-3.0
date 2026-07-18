@@ -41,7 +41,7 @@ export default function LoginPage() {
         <div className="flex flex-col justify-around w-full px-12 py-10">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-lime-400">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-lime-400">
               <Zap size={20} className="fill-black text-black" />
             </div>
 
@@ -126,21 +126,21 @@ export default function LoginPage() {
               <input
                 {...register("password", {
                   required: "Password is required",
-                  // validate: {
-                  //   minLength: (v) =>
-                  //     v.length >= 8 || "Must be at least 8 characters long",
-                  //   uppercase: (v) =>
-                  //     /[A-Z]/.test(v) ||
-                  //     "Must include at least one uppercase letter",
-                  //   lowercase: (v) =>
-                  //     /[a-z]/.test(v) ||
-                  //     "Must include at least one lowercase letter",
-                  //   number: (v) =>
-                  //     /\d/.test(v) || "Must include at least one number",
-                  //   specialChar: (v) =>
-                  //     /[`!@#$%^&*()_+{}|:"<>?~=\-[\]\\;',./]/.test(v) ||
-                  //     "Must include at least one special character",
-                  // },
+                  validate: {
+                    minLength: (v) =>
+                      v.length >= 8 || "Must be at least 8 characters long",
+                    uppercase: (v) =>
+                      /[A-Z]/.test(v) ||
+                      "Must include at least one uppercase letter",
+                    lowercase: (v) =>
+                      /[a-z]/.test(v) ||
+                      "Must include at least one lowercase letter",
+                    number: (v) =>
+                      /\d/.test(v) || "Must include at least one number",
+                    specialChar: (v) =>
+                      /[`!@#$%^&*()_+{}|:"<>?~=\-[\]\\;',./]/.test(v) ||
+                      "Must include at least one special character",
+                  },
                 })}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
