@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, Star } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 
-export default function LoginPage() {
+const Login = ({ users }) => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -30,7 +32,29 @@ export default function LoginPage() {
   ];
 
   const formHandle = (data) => {
-    console.log(data);
+    let obj = users.find((elem) => elem.email === data.email);
+
+    if (!obj) {
+      alert("Seems like you haven't logged in, create an account first! 😑");
+      navigate("/signup");
+      return;
+    }
+
+    if (obj.password !== data.password) {
+      console.log("password mismatch, try again!");
+      return;
+    }
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify({
+        id: obj.id,
+        userName: obj.userName,
+        email: obj.email,
+      }),
+    );
+    alert("Loggin successfully, happy shoping!🎉");
+    navigate("/home");
     reset();
   };
 
@@ -126,21 +150,6 @@ export default function LoginPage() {
               <input
                 {...register("password", {
                   required: "Password is required",
-                  validate: {
-                    minLength: (v) =>
-                      v.length >= 8 || "Must be at least 8 characters long",
-                    uppercase: (v) =>
-                      /[A-Z]/.test(v) ||
-                      "Must include at least one uppercase letter",
-                    lowercase: (v) =>
-                      /[a-z]/.test(v) ||
-                      "Must include at least one lowercase letter",
-                    number: (v) =>
-                      /\d/.test(v) || "Must include at least one number",
-                    specialChar: (v) =>
-                      /[`!@#$%^&*()_+{}|:"<>?~=\-[\]\\;',./]/.test(v) ||
-                      "Must include at least one special character",
-                  },
                 })}
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -171,7 +180,10 @@ export default function LoginPage() {
 
           <p className="mt-8 text-center text-zinc-500">
             Don't have an account?{" "}
-            <span className="cursor-pointer font-semibold text-lime-400 hover:underline">
+            <span
+              onClick={() => navigate("/signup")}
+              className="cursor-pointer font-semibold text-lime-400 hover:underline"
+            >
               Create one
             </span>
           </p>
@@ -179,4 +191,6 @@ export default function LoginPage() {
       </section>
     </div>
   );
-}
+};
+
+export default Login;

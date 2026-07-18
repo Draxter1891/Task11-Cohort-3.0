@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { ArrowRight, Eye, EyeOff, Lock, Mail, User, Zap } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { nanoid } from "nanoid";
 
-const Signup = () => {
+const Signup = ({ setUsers, users }) => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -15,12 +19,31 @@ const Signup = () => {
     mode: "onChange",
   });
 
-//   const checkPassword = watch("password");
-
+  //   const checkPassword = watch("password");
 
   const formHandle = (data) => {
-    console.log(data);
-    // reset();
+    const isLoggedin = users.some((elem) => elem.email === data.email);
+
+    if (isLoggedin) {
+      alert("Email already exists, try logging in! 🤔");
+      navigate("/");
+      return;
+    }
+
+    const { userName, email, password } = data;
+
+    let arr = [
+      ...users,
+      {
+        id: nanoid(),
+        userName,
+        email,
+        password,
+      },
+    ];
+    setUsers(arr);
+    reset();
+    navigate("/");
   };
   return (
     <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6">
@@ -153,7 +176,7 @@ const Signup = () => {
             </p>
           )}
           {/* Button */}
-          <button className="mt-2 flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-lime-400 text-xl font-semibold text-black transition hover:bg-lime-300 cursor-pointer">
+          <button className="mt-2 flex h-12 w-full items-center justify-center gap-3 rounded-2xl bg-lime-400 text-xl font-semibold text-black transition hover:bg-lime-300 font-[clash] cursor-pointer">
             Create Account
             <ArrowRight size={22} />
           </button>
@@ -162,6 +185,7 @@ const Signup = () => {
         <p className="mt-6 text-center text-zinc-500">
           Already have an account?{" "}
           <button
+            onClick={() => navigate("/")}
             type="button"
             className="font-semibold text-lime-400 hover:underline cursor-pointer"
           >
