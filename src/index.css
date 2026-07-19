@@ -31,4 +31,7 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
 }
+#root{
+  background: #000000;
+}
 
