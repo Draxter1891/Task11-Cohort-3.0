@@ -1,19 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, Star } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { Auth } from "../context/AuthContext";
 
-const Login = ({ users }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
     mode: "onChange",
   });
+
+ const {login} =  useContext(Auth)
 
   const stats = [
     {
@@ -31,32 +33,6 @@ const Login = ({ users }) => {
     },
   ];
 
-  const formHandle = (data) => {
-    let obj = users.find((elem) => elem.email === data.email);
-
-    if (!obj) {
-      alert("Seems like you haven't logged in, create an account first! 😑");
-      navigate("/signup");
-      return;
-    }
-
-    if (obj.password !== data.password) {
-      console.log("password mismatch, try again!");
-      return;
-    }
-
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify({
-        id: obj.id,
-        userName: obj.userName,
-        email: obj.email,
-      }),
-    );
-    alert("Loggin successfully, happy shoping!🎉");
-    navigate("/home");
-    reset();
-  };
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] flex">
@@ -122,7 +98,7 @@ const Login = ({ users }) => {
             Enter your credentials to continue
           </p>
 
-          <form onSubmit={handleSubmit(formHandle)} className="mt-5 space-y-2">
+          <form onSubmit={handleSubmit(login)} className="mt-5 space-y-2">
             {/* Email */}
             <div className="flex h-12 items-center rounded-2xl border border-zinc-800 bg-[#1A1A1A] px-5">
               <Mail size={18} className="text-zinc-500/50" />

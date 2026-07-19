@@ -14,10 +14,6 @@ const App = () => {
   }, [users]);
   return (
     <div className="w-full min-h-screen bg-black">
-      {/* <Home/> */}
-      {/* <h1 className='text-white'>Radhe Radhe</h1> */}
-      {/* <Login/> */}
-      {/* <Signup/> */}
       <AppRoutes setUsers={setUsers} users={users} />
     </div>
   );

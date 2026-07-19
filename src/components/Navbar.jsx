@@ -1,0 +1,150 @@
+import { NavLink, useOutletContext } from "react-router";
+import { ShoppingCart, LogOut, Zap, Menu, X } from "lucide-react";
+import { useContext, useState } from "react";
+import Cart from "./Cart";
+import { Auth } from "../context/AuthContext";
+
+const Navbar = () => {
+  const [toggle, setToggle] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { currentUser, logout } = useContext(Auth);
+
+  return (
+    <header className="border-b border-zinc-800 bg-[#0b0b0b] mb-2">
+      <div className="m-auto flex h-18 max-w-7xl items-center justify-between px-2">
+        {/* Logo */}
+        <NavLink to="/home" className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-lime-400">
+            <Zap size={20} className="fill-black text-black" />
+          </div>
+
+          <h1 className="text-2xl font-bold tracking-tight text-white font-[clash]">
+            Sky
+            <span className="text-lime-400">Mart</span>
+          </h1>
+        </NavLink>
+
+        {/* Navigation */}
+        <nav className="hidden md:flex lg:flex items-center gap-10 text-base">
+          <NavLink
+            to="/home"
+            className={({ isActive }) =>
+              `font-medium transition ${
+                isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+              }`
+            }
+          >
+            Home
+          </NavLink>
+
+          <NavLink
+            to="/shop"
+            className={({ isActive }) =>
+              `font-medium transition ${
+                isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+              }`
+            }
+          >
+            Shop
+          </NavLink>
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `font-medium transition ${
+                isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+              }`
+            }
+          >
+            About
+          </NavLink>
+        </nav>
+
+        {/* Right */}
+        <div className="flex items-center gap-3">
+          {/* User */}
+          <div className="hidden lg:flex md:flex sm:flex items-center gap-2 rounded-xl border border-zinc-800 bg-[#111111] px-2 py-1 bg-zinc-800/70">
+            <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-lime-400 font-semibold text-black">
+              {currentUser?.userName?.charAt(0).toUpperCase()}
+            </div>
+
+            <span className="font-medium text-sm text-zinc-300">
+              {currentUser?.userName}
+            </span>
+          </div>
+
+          {/* Cart */}
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-[#111111] text-zinc-300 transition hover:border-lime-400 hover:text-lime-400 cursor-pointer"
+          >
+            <ShoppingCart size={20} />
+          </button>
+
+          {/* Logout */}
+          <button
+            onClick={logout}
+            className="hidden lg:flex md:flex  h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-[#111111] text-zinc-300 transition hover:border-red-500 hover:text-red-500 cursor-pointer"
+          >
+            <LogOut size={20} />
+          </button>
+          {/* Hamberger */}
+          <button
+            onClick={() => setToggle(!toggle)}
+            className="lg:hidden md:hidden flex h-10 w-10 items-center justify-center rounded-2xl border border-zinc-800 bg-[#111111] text-zinc-300 transition cursor-pointer"
+          >
+            {toggle ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </div>
+      {/* Responsive Navigation */}
+      {toggle && (
+        <div className={` lg:hidden md:hidden w-full bg-zinc-800/60 px-8 py-2`}>
+          <nav className=" flex flex-col items-start gap-6 text-base ">
+            <NavLink
+              to="/home"
+              className={({ isActive }) =>
+                `font-medium transition ${
+                  isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+                }`
+              }
+            >
+              Home
+            </NavLink>
+
+            <NavLink
+              to="/shop"
+              className={({ isActive }) =>
+                `font-medium transition ${
+                  isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+                }`
+              }
+            >
+              Shop
+            </NavLink>
+
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                `font-medium transition ${
+                  isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+                }`
+              }
+            >
+              About
+            </NavLink>
+            <NavLink
+              onClick={logout}
+              className={`flex gap-2 text-red-500 items-center font-medium`}
+            >
+              <LogOut size={18} /> Logout
+            </NavLink>
+          </nav>
+        </div>
+      )}
+      <Cart setIsCartOpen={setIsCartOpen} isCartOpen={isCartOpen} />
+    </header>
+  );
+};
+
+export default Navbar;

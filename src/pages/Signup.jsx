@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ArrowRight, Eye, EyeOff, Lock, Mail, User, Zap } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { nanoid } from "nanoid";
+import { Auth } from "../context/AuthContext";
 
-const Signup = ({ setUsers, users }) => {
+const Signup = () => {
+
+  const {signup} = useContext(Auth);
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
-    reset,
     handleSubmit,
     // watch, //Alternatively, getValues() can also be used here
     getValues,
@@ -22,7 +24,7 @@ const Signup = ({ setUsers, users }) => {
   //   const checkPassword = watch("password");
 
   const formHandle = (data) => {
-    const isLoggedin = users.some((elem) => elem.email === data.email);
+    const isLoggedin = users.some((elem) => elem.email === data.email.toLowerCase());
 
     if (isLoggedin) {
       alert("Email already exists, try logging in! 🤔");
@@ -69,7 +71,7 @@ const Signup = ({ setUsers, users }) => {
         </p>
 
         <form
-          onSubmit={handleSubmit((data) => formHandle(data))}
+          onSubmit={handleSubmit(signup)}
           className="mt-7 space-y-2"
         >
           {/* Full Name */}

@@ -4,7 +4,7 @@ const ProtectedRoute = () => {
     let currentUser = (localStorage.getItem("currentUser"));
 
 
-  return currentUser?<Outlet/>:<Navigate to={"/"} replace/>
+  return currentUser?<Outlet context={{currentUser}}/>:<Navigate to={"/login"} replace/>
 }
 
 export default ProtectedRoute;
