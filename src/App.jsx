@@ -5,16 +5,9 @@ import Signup from "./pages/Signup";
 import AppRoutes from "./routes/AppRoutes";
 
 const App = () => {
-  const [users, setUsers] = useState(() => {
-    return JSON.parse(localStorage.getItem("users")) || [];
-  });
-
-  useEffect(() => {
-    localStorage.setItem("users", JSON.stringify(users));
-  }, [users]);
   return (
     <div className="w-full min-h-screen bg-black">
-      <AppRoutes setUsers={setUsers} users={users} />
+      <AppRoutes/>
     </div>
   );
 };

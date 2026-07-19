@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Outlet, Navigate } from 'react-router';
+import { Auth } from '../context/AuthContext';
+
 const ProtectedRoute = () => {
-    let currentUser = (localStorage.getItem("currentUser"));
+  const {currentUser} = useContext(Auth);
 
 
-  return currentUser?<Outlet context={{currentUser}}/>:<Navigate to={"/login"} replace/>
+  return currentUser?<Outlet/>:<Navigate to={"/login"} replace/>
 }
 
 export default ProtectedRoute;

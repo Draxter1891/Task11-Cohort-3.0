@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Zap, Mail, Lock, Eye, EyeOff, ArrowRight, Star } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { Auth } from "../context/AuthContext";
 
 const Login = () => {
@@ -15,7 +15,11 @@ const Login = () => {
     mode: "onChange",
   });
 
- const {login} =  useContext(Auth)
+  const { login, currentUser } = useContext(Auth);
+
+  if (currentUser) {
+    return <Navigate to={"/"} replace/>;
+  }
 
   const stats = [
     {
@@ -32,7 +36,6 @@ const Login = () => {
       icon: <Star size={18} fill="currentColor" />,
     },
   ];
-
 
   return (
     <div className="min-h-screen bg-[#0B0B0B] flex">

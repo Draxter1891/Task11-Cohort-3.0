@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Home from "../pages/Home";
@@ -8,21 +8,19 @@ import Shop from "../pages/Shop";
 import About from "../pages/About";
 import Parent from "../pages/Parent";
 
-const AppRoutes = ({ setUsers, users }) => {
+const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Parent/>}>
+        <Route path="/" element={<Parent />}>
+          <Route index element={<Navigate to={"home"} replace />} />
           <Route path="home" element={<Home />} />
           <Route path="shop" element={<Shop />} />
           <Route path="about" element={<About />} />
         </Route>
       </Route>
-      <Route path="/login" element={<Login users={users} />} />
-      <Route
-        path="/signup"
-        element={<Signup setUsers={setUsers} users={users} />}
-      />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
     </Routes>
   );
 };

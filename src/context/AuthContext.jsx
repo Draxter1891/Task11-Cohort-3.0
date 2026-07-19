@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
-import { Children, createContext, useEffect, useState } from "react";
-import { useForm, } from "react-hook-form";
+import { createContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 
 export const Auth = createContext();
@@ -10,7 +10,7 @@ export const AuthContext = ({ children }) => {
   const [users, setUsers] = useState(() => {
     return JSON.parse(localStorage.getItem("users")) || [];
   });
- const {reset} = useForm();
+  const { reset } = useForm();
   const [currentUser, setCurrentUser] = useState(() => {
     return JSON.parse(localStorage.getItem("currentUser")) || null;
   });
@@ -25,7 +25,7 @@ export const AuthContext = ({ children }) => {
     }
 
     if (obj.password !== data.password) {
-      console.log("password mismatch, try again!");
+      alert("password mismatch, try again!");
       return;
     }
 

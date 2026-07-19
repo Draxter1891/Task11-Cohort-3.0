@@ -98,50 +98,55 @@ const Navbar = () => {
         </div>
       </div>
       {/* Responsive Navigation */}
-      {toggle && (
-        <div className={` lg:hidden md:hidden w-full bg-zinc-800/60 px-8 py-2`}>
-          <nav className=" flex flex-col items-start gap-6 text-base ">
-            <NavLink
-              to="/home"
-              className={({ isActive }) =>
-                `font-medium transition ${
-                  isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
-                }`
-              }
-            >
-              Home
-            </NavLink>
 
-            <NavLink
-              to="/shop"
-              className={({ isActive }) =>
-                `font-medium transition ${
-                  isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
-                }`
-              }
-            >
-              Shop
-            </NavLink>
+      <div
+        className={`lg:hidden md:hidden w-full bg-zinc-800/60 px-8  transition-all duration-400 ease-in-out ${
+          toggle
+            ? "opacity-100 max-h-96 py-2 border-t border-zinc-600"
+            : "opacity-0 pointer-events-none max-h-0 py-0"
+        }`}
+      >
+        <nav className=" flex flex-col items-start gap-6 text-base ">
+          <NavLink
+            to="/home"
+            className={({ isActive }) =>
+              `font-medium transition ${
+                isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+              }`
+            }
+          >
+            Home
+          </NavLink>
 
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                `font-medium transition ${
-                  isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
-                }`
-              }
-            >
-              About
-            </NavLink>
-            <NavLink
-              onClick={logout}
-              className={`flex gap-2 text-red-500 items-center font-medium`}
-            >
-              <LogOut size={18} /> Logout
-            </NavLink>
-          </nav>
-        </div>
-      )}
+          <NavLink
+            to="/shop"
+            className={({ isActive }) =>
+              `font-medium transition ${
+                isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+              }`
+            }
+          >
+            Shop
+          </NavLink>
+
+          <NavLink
+            to="/about"
+            className={({ isActive }) =>
+              `font-medium transition ${
+                isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
+              }`
+            }
+          >
+            About
+          </NavLink>
+          <NavLink
+            onClick={logout}
+            className={`flex gap-2 text-red-500 items-center font-medium`}
+          >
+            <LogOut size={18} /> Logout
+          </NavLink>
+        </nav>
+      </div>
       <Cart setIsCartOpen={setIsCartOpen} isCartOpen={isCartOpen} />
     </header>
   );
