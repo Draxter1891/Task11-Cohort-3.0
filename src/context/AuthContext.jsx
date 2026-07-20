@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { createContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 export const Auth = createContext();
 
@@ -19,13 +20,17 @@ export const AuthContext = ({ children }) => {
     let obj = users.find((elem) => elem.email === data.email.toLowerCase());
 
     if (!obj) {
-      alert("Seems like you haven't logged in, create an account first!");
+      toast.warn("Seems like you haven't logged in, create an account first!",{
+        position:'top-center'
+      })
       navigate("/signup");
       return;
     }
 
     if (obj.password !== data.password) {
-      alert("password mismatch, try again!");
+      toast.error("Password mismatch, try again!",{
+        position:'top-center'
+      })
       return;
     }
 
@@ -36,7 +41,9 @@ export const AuthContext = ({ children }) => {
     });
 
     navigate("/home");
-    alert("Loggin successfully, happy shoping!");
+    toast.dark("Loggin successfully, happy shoping!",{
+      position:'top-center'
+    })
     reset();
   };
 
@@ -44,8 +51,10 @@ export const AuthContext = ({ children }) => {
     const isLoggedin = users.some((elem) => elem.email === data.email);
 
     if (isLoggedin) {
-      alert("Email already exists, try logging in!");
-      navigate("/");
+      toast.warn("Email already exists, try logging in!", {
+        position:'top-center'
+      })
+      navigate("/login");
       return;
     }
 
@@ -67,6 +76,9 @@ export const AuthContext = ({ children }) => {
 
   const logout = () => {
     setCurrentUser(null);
+    toast.info("Hope you visit soon.",{
+      position:'top-center'
+    })
     navigate("/login");
     return;
   };

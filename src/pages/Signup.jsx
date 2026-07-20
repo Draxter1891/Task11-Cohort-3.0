@@ -23,30 +23,6 @@ const Signup = () => {
 
   //   const checkPassword = watch("password");
 
-  const formHandle = (data) => {
-    const isLoggedin = users.some((elem) => elem.email === data.email.toLowerCase());
-
-    if (isLoggedin) {
-      alert("Email already exists, try logging in! 🤔");
-      navigate("/");
-      return;
-    }
-
-    const { userName, email, password } = data;
-
-    let arr = [
-      ...users,
-      {
-        id: nanoid(),
-        userName,
-        email,
-        password,
-      },
-    ];
-    setUsers(arr);
-    reset();
-    navigate("/");
-  };
   return (
     <div className="min-h-screen bg-[#0b0b0b] flex flex-col items-center justify-center px-6">
       {/* Logo */}
@@ -61,7 +37,7 @@ const Signup = () => {
       </div>
 
       {/* Card */}
-      <div className="w-full max-w-[450px] rounded-3xl border border-zinc-800 bg-[#111111] p-6 shadow-2xl">
+      <div className="w-full max-w-112.5 rounded-3xl border border-zinc-800 bg-[#111111] p-6 shadow-2xl">
         <h2 className="text-2xl font-bold text-white font-[clash]">
           Create account
         </h2>

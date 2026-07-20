@@ -7,10 +7,12 @@ import ProtectedRoute from "./ProtectedRoute";
 import Shop from "../pages/Shop";
 import About from "../pages/About";
 import Parent from "../pages/Parent";
+import NotFound from "../components/NotFound";
 
 const AppRoutes = () => {
   return (
     <Routes>
+      <Route path="*" element={<NotFound/>}/>
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Parent />}>
           <Route index element={<Navigate to={"home"} replace />} />

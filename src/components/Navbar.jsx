@@ -63,7 +63,7 @@ const Navbar = () => {
         {/* Right */}
         <div className="flex items-center gap-3">
           {/* User */}
-          <div className="hidden lg:flex md:flex sm:flex items-center gap-2 rounded-xl border border-zinc-800 bg-[#111111] px-2 py-1 bg-zinc-800/70">
+          <div className="hidden lg:flex md:flex sm:flex items-center gap-2 rounded-xl border border-zinc-800 px-2 py-1 bg-zinc-800/70">
             <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-lime-400 font-semibold text-black">
               {currentUser?.userName?.charAt(0).toUpperCase()}
             </div>
@@ -76,7 +76,7 @@ const Navbar = () => {
           {/* Cart */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-[#111111] text-zinc-300 transition hover:border-lime-400 hover:text-lime-400 cursor-pointer"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-800/10 text-zinc-300 transition hover:border-lime-400 hover:text-lime-400 cursor-pointer"
           >
             <ShoppingCart size={20} />
           </button>

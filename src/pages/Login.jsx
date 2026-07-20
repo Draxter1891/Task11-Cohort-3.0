@@ -92,7 +92,7 @@ const Login = () => {
 
       {/* RIGHT SIDE */}
       <section className="flex w-full items-center justify-center px-6 lg:w-1/2">
-        <div className="w-full max-w-[520px] rounded-[30px] border border-zinc-800 bg-[#101010] p-8 shadow-2xl">
+        <div className="w-full max-w-130 rounded-[30px] border border-zinc-800 bg-[#101010] p-8 shadow-2xl">
           <h2 className="text-3xl font-bold text-white font-[clash]">
             Sign in
           </h2>
