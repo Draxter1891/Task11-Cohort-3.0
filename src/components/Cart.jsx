@@ -5,7 +5,7 @@ const Cart = ({ setIsCartOpen, isCartOpen }) => {
   const navigate = useNavigate();
   return (
     <div
-      className={`absolute top-0 left-0 w-full select-none h-screen overflow-hidden transition-all duration-200 ${isCartOpen ? "bg-black/10 backdrop-blur-[4px] visible" : "backdrop-blur-none invisible"} `}
+      className={`absolute top-0 left-0 w-full select-none h-screen overflow-hidden transition-all duration-200 ${isCartOpen ? "bg-black/10 backdrop-blur-xs visible" : "backdrop-blur-none invisible"} `}
     >
       <div
         className={`fixed top-0 right-0 h-screen w-full md:w-1/2 lg:w-1/3 bg-[#111111] border-l border-zinc-700 z-50 flex flex-col transition-transform duration-200 ease-in-out ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
