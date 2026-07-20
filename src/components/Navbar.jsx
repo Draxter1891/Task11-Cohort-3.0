@@ -10,8 +10,8 @@ const Navbar = () => {
   const { currentUser, logout } = useContext(Auth);
 
   return (
-    <header className="border-b border-zinc-800 bg-[#0b0b0b] mb-2">
-      <div className="m-auto flex h-18 max-w-7xl items-center justify-between px-2">
+    <header className="w-full sticky top-0 left-0 z-9 border-b border-zinc-800 bg-zinc-900/40 mb-2">
+      <div className="backdrop-blur-md m-auto flex h-18 max-w-7xl items-center justify-between px-2">
         {/* Logo */}
         <NavLink to="/home" className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-lime-400">
