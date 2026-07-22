@@ -1,115 +1,123 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Auth } from "../context/AuthContext";
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  CassetteTape,
+  Icon,
+  Package,
+  Phone,
+  Star,
+  Tag,
+  TrendingUp,
+  Armchair,
+  ArrowUpRight,
+  Broccoli,
+  Flower2,
+  SoapDispenserDroplet,
+} from "lucide-react";
 import { useNavigate } from "react-router";
+import HeroComponent from "../components/HeroComponent";
+import StatCard from "../components/StatCard";
+import CategoryCard from "../components/CategoryCard";
+import { Products } from "../context/ProductContext";
+import { nanoid } from "nanoid";
 
 const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { currentUser } = useContext(Auth);
-  const now = new Date();
-  const currentHour = now.getHours();
-  const [greet, setGreet] = useState("Hello");
-  const getGreeting = () => {
-    if (currentHour >= 5 && currentHour < 12) {
-      return setGreet("Good Morning");
-    } else if (currentHour >= 12 && currentHour < 17) {
-      return setGreet("Good Afternoon");
-    } else {
-      return setGreet("Good Evening");
-    }
+  const { products } = useContext(Products);
+
+  let categories = products.map((elem) => {
+    return elem.category;
+  });
+
+  let categoryCount = [];
+
+  let catClassify = {};
+  for (let val of categories) {
+    catClassify[val] = (catClassify[val] || 0) + 1;
+  }
+
+  let catKeys = Object.keys(catClassify);
+
+  for (let val of catKeys) {
+    let obj = {
+      id: nanoid(),
+      name: val,
+      totalCount: catClassify[val],
+    };
+    categoryCount.push(obj);
+  }
+
+  const iconNames = {
+    beauty: SoapDispenserDroplet,
+    fragrances: Flower2,
+    furniture: Armchair,
+    groceries: Broccoli,
   };
 
-  useEffect(() => {
-    getGreeting();
-  }, [currentHour]);
   return (
     <div className="px-15 py-8">
       {/* Hero section */}
-        <div
-          className="relative overflow-hidden rounded-4xl border border-zinc-700 bg-[#101010]"
-          style={{
-            backgroundImage: `
-          linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px)
-        `,
-            backgroundSize: "40px 40px",
-          }}
-        >
-          <div className="flex min-h-107.5 flex-col justify-between gap-10 px-12 py-12 lg:flex-row lg:items-center">
-            {/* Left */}
-            <div className="max-w-2xl">
-              <p className="mb-5 text-sm font-semibold uppercase tracking-[0.22em] text-lime-400">
-                {greet}
-              </p>
-
-              <h1 className="text-2xl font-bold leading-none text-white lg:text-5xl">
-                Welcome back,
-                <br />
-                <span className="text-[#C8FF00] font-[clash]">{currentUser.userName}</span>
-              </h1>
-
-              <p className="mt-8 max-w-xl text-lg leading-8 text-zinc-400">
-                Discover today's picks — hand-curated products across
-                electronics, fashion, and more.
-              </p>
-
-              <div className="mt-12 flex flex-wrap gap-5">
-                <button
-                onClick={()=>navigate("/shop")}
-                  className="flex items-center gap-3 rounded-full
-                bg-[#C8FF00] px-8 py-4 font-semibold text-black
-                transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(215,255,0,0.35)] cursor-pointer"
-                >
-                  Shop Now
-                  <ArrowRight size={18} />
-                </button>
-
-                <button
-                onClick={()=>{navigate("/shop")}}
-                  className="rounded-full border border-zinc-700
-                px-8 py-4 font-medium text-white
-                transition-all duration-300
-                hover:border-lime-400 hover:bg-lime-400/10 cursor-pointer"
-                >
-                  View All Products
-                </button>
-              </div>
-            </div>
-
-            {/* Right */}
-            <div className="flex flex-col gap-5">
-              <div
-                className="flex h-40 w-44 flex-col items-center justify-center
-              rounded-3xl border border-lime-400/20
-              bg-lime-400/10"
-              >
-                <h2 className="text-5xl font-bold text-[#C8FF00] font-[clash]">20+</h2>
-
-                <p className="mt-2 text-center text-zinc-400">
-                  Products Available
-                </p>
-              </div>
-
-              <div
-                className="flex h-32 w-44 flex-col items-center justify-center
-              rounded-3xl border border-zinc-300"
-              >
-                <h2 className="text-4xl font-bold text-white">Free</h2>
-
-                <p className="mt-2 text-center text-zinc-400">
-                  Delivery on
-                  <span className="font-[clash]"> ₹999+</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Glow */}
-          <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-lime-400/10 blur-[120px]" />
-
-          <div className="absolute -bottom-20 right-0 h-72 w-72 rounded-full bg-lime-400/10 blur-[140px]" />
+      <HeroComponent />
+      {/* Stats section */}
+      <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          icon={Package}
+          value={"0"}
+          title={"Cart items"}
+          subtitle={"In your bag"}
+          bgColor={"bg-lime-500/20"}
+          iconColor={"text-lime-400"}
+        />
+        <StatCard
+          icon={TrendingUp}
+          value={`$0.00`}
+          title={"Cart value"}
+          subtitle={"Ready to checkout"}
+          bgColor={"bg-blue-500/20"}
+          iconColor={"text-blue-400"}
+        />
+        <StatCard
+          icon={Star}
+          value={`$0.00`}
+          title={"Top products"}
+          subtitle={"Highly rated"}
+          bgColor={"bg-yellow-800/20"}
+          iconColor={"text-yellow-300"}
+        />
+        <StatCard
+          icon={Tag}
+          value={`$0.00`}
+          title={"Categories"}
+          subtitle={"To explore"}
+          bgColor={"bg-purple-500/20"}
+          iconColor={"text-purple-300"}
+        />
+      </div>
+      {/* Category filters */}
+      <div className="mt-12">
+        <div className="flex w-full justify-between text-white">
+          <h2 className="text-2xl font-[clash]">Shop by category</h2>
+          <h3
+            onClick={() => navigate("/shop")}
+            className="text-md text-lime-500 flex gap-2 items-center cursor-pointer"
+          >
+            View all <ArrowRight size={18} />{" "}
+          </h3>
         </div>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+          {categoryCount.map((elem) => (
+            <CategoryCard
+              key={elem.id}
+              icon = {iconNames[elem.name]}
+              name={elem.name}
+              totalProducts={elem.totalCount}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,13 +1,20 @@
 import { Package, ShoppingBag, X } from "lucide-react";
+import { useContext, useRef } from "react";
 import { useNavigate } from "react-router";
+import useClickOutside from "../hooks/useClickOutside";
+import { Products } from "../context/ProductContext";
 
-const Cart = ({ setIsCartOpen, isCartOpen }) => {
+const Cart = () => {
+  const { setIsCartOpen, isCartOpen } = useContext(Products);
   const navigate = useNavigate();
+  const cartRef = useRef(null);
+  useClickOutside(cartRef, () => setIsCartOpen(false), isCartOpen);
   return (
     <div
       className={`absolute top-0 left-0 z-19 w-full select-none h-screen overflow-hidden transition-all duration-200 ${isCartOpen ? "bg-black/10 backdrop-blur-xs visible" : "backdrop-blur-none invisible"} `}
     >
       <div
+        ref={cartRef}
         className={`fixed top-0 right-0 h-screen w-full md:w-1/2 lg:w-1/3 bg-[#111111] border-l border-zinc-700 z-50 flex flex-col transition-transform duration-200 ease-in-out ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Header */}
@@ -37,7 +44,9 @@ const Cart = ({ setIsCartOpen, isCartOpen }) => {
             Cart is empty
           </h3>
 
-          <p className="text-zinc-500 text-base">Explore our wide variety of products!</p>
+          <p className="text-zinc-500 text-base">
+            Explore our wide variety of products!
+          </p>
 
           <button
             onClick={() => {

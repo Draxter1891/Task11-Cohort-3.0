@@ -1,16 +1,21 @@
 import { NavLink, useOutletContext } from "react-router";
 import { ShoppingCart, LogOut, Zap, Menu, X } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Cart from "./Cart";
 import { Auth } from "../context/AuthContext";
+import { Products } from "../context/ProductContext";
+import useClickOutside from "../hooks/useClickOutside";
 
 const Navbar = () => {
-  const [toggle, setToggle] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const { currentUser, logout } = useContext(Auth);
+  const { toggle, setToggle, isCartOpen, setIsCartOpen } = useContext(Products);
+
+  const menuRef = useRef(null);
+
+  useClickOutside(menuRef, () => setToggle(false), toggle);
 
   return (
-    <header className="w-full sticky top-0 left-0 z-9 border-b border-zinc-800 bg-zinc-900/40 mb-2">
+    <header className="w-full sticky top-0 left-0 z-10 border-b border-zinc-800 bg-zinc-900/40 mb-2">
       <div className="backdrop-blur-md m-auto flex h-18 max-w-7xl items-center justify-between px-2">
         {/* Logo */}
         <NavLink to="/home" className="flex items-center gap-3">
@@ -100,6 +105,7 @@ const Navbar = () => {
       {/* Responsive Navigation */}
 
       <div
+        ref={menuRef}
         className={`lg:hidden md:hidden w-full bg-zinc-800/60 px-8  transition-all duration-400 ease-in-out ${
           toggle
             ? "opacity-100 max-h-96 py-2 border-t border-zinc-600"
@@ -147,7 +153,7 @@ const Navbar = () => {
           </NavLink>
         </nav>
       </div>
-      <Cart setIsCartOpen={setIsCartOpen} isCartOpen={isCartOpen} />
+      <Cart />
     </header>
   );
 };

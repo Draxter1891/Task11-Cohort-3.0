@@ -35,3 +35,19 @@ body {
   background: #000000;
 }
 
+::-webkit-scrollbar{
+  width: 2px;
+  background: #242424;
+}
+::-webkit-scrollbar-thumb{
+  background: rgb(92, 92, 92);
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background: #c7fe00a1;
+  border-radius: 2px;
+}
+::selection{
+  background: #42ff1c;
+  color: #000;
+}

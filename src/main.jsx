@@ -4,12 +4,15 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router";
 import { AuthContext } from "./context/AuthContext.jsx";
 import { ToastContainer, Zoom, toast } from "react-toastify";
+import { ProductContext } from "./context/ProductContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <AuthContext>
-      <App />
-      <ToastContainer transition={Zoom} autoClose={1000} limit={1}/>
+      <ProductContext>
+        <App />
+        <ToastContainer transition={Zoom} autoClose={1000} limit={1} />
+      </ProductContext>
     </AuthContext>
   </BrowserRouter>,
 );
