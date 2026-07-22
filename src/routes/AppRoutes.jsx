@@ -8,16 +8,18 @@ import Shop from "../pages/Shop";
 import About from "../pages/About";
 import Parent from "../pages/Parent";
 import NotFound from "../components/NotFound";
+import ProductDetails from "../components/ProductDetails";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="*" element={<NotFound/>}/>
+      <Route path="*" element={<NotFound />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Parent />}>
           <Route index element={<Navigate to={"home"} replace />} />
           <Route path="home" element={<Home />} />
           <Route path="shop" element={<Shop />} />
+          <Route path="shop/details/:id" element={<ProductDetails />} />
           <Route path="about" element={<About />} />
         </Route>
       </Route>

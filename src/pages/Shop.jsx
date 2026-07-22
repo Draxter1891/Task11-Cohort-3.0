@@ -9,7 +9,7 @@ const Shop = () => {
   if (isLoading) {
     return (
       <div className="flex h-[70vh] items-center justify-center">
-        <Atom color="#32cd32" size="medium" text="" textColor="" />
+        <Atom color="#32cd32" size="medium" text="Loading" textColor="green" />
       </div>
     );
   }
@@ -28,7 +28,7 @@ const Shop = () => {
       <p className="mb-10 text-base text-zinc-500">
         {products.length} products found
       </p>
-      <div></div>
+      
 
       <div className="grid gap-8 grid-cols-1 md:grid-cols-3 xl:grid-cols-4">
         {products.map((elem) => (

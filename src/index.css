@@ -8,10 +8,6 @@
   font-family: "cabinet";
   src: url("assets/fonts/Cabinet-Grotesk.woff2");
 }
-@font-face {
-  font-family: "dm";
-  src: url("assets/fonts/Dm-sans.woff2");
-}
 
 
 *,

@@ -5,9 +5,11 @@ import {
   Star,
   BadgeCheck,
 } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Product = ({ product }) => {
   const {
+    id,
     title,
     description,
     category,
@@ -25,11 +27,13 @@ const Product = ({ product }) => {
     (1 - discountPercentage / 100)
   ).toFixed(2);
 
+  const navigate = useNavigate()
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition-all duration-300 hover:-translate-y-2 hover:border-lime-400 hover:shadow-2xl hover:shadow-lime-500/10">
 
       {/* Image */}
-      <div className="relative overflow-hidden bg-zinc-950">
+      <div onClick={()=>navigate(`/shop/details/${id}`)} className="relative overflow-hidden bg-zinc-950">
 
         <button className="absolute right-4 top-4 z-8 rounded-full bg-zinc-900/90 p-2 transition hover:bg-lime-400 hover:text-black cursor-pointer">
           <Heart size={18} />

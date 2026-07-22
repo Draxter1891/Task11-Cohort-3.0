@@ -13,7 +13,7 @@ export const ProductContext = ({ children }) => {
   const fetchProducts = async () => {
     try {
       setIsLoading(true);
-      let res = await axios.get("https://dummyjson.com/products?limit=30");
+      let res = await axios.get("https://dummyjson.com/products?limit=40");
       let { products } = res.data;
       setProducts(products);
     } catch (error) {
