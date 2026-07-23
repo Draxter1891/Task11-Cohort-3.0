@@ -20,17 +20,17 @@ export const AuthContext = ({ children }) => {
     let obj = users.find((elem) => elem.email === data.email.toLowerCase());
 
     if (!obj) {
-      toast.warn("Seems like you haven't logged in, create an account first!",{
-        position:'top-center'
-      })
+      toast.warn("Seems like you haven't logged in, create an account first!", {
+        position: "top-center",
+      });
       navigate("/signup");
       return;
     }
 
     if (obj.password !== data.password) {
-      toast.error("Password mismatch, try again!",{
-        position:'top-center'
-      })
+      toast.error("Password mismatch, try again!", {
+        position: "top-center",
+      });
       return;
     }
 
@@ -41,9 +41,9 @@ export const AuthContext = ({ children }) => {
     });
 
     navigate("/home");
-    toast.dark("Loggin successfully, happy shoping!",{
-      position:'top-center'
-    })
+    toast.dark("Loggin successfully, happy shoping!", {
+      position: "top-center",
+    });
     reset();
   };
 
@@ -52,33 +52,40 @@ export const AuthContext = ({ children }) => {
 
     if (isLoggedin) {
       toast.warn("Email already exists, try logging in!", {
-        position:'top-center'
-      })
+        position: "top-center",
+      });
       navigate("/login");
       return;
     }
 
     const { userName, email, password } = data;
 
+    let user = {
+      id: nanoid(),
+      userName,
+      email: email.toLowerCase(),
+      password,
+      cartItems: [],
+    };
     let arr = [
       ...users,
-      {
-        id: nanoid(),
-        userName,
-        email,
-        password,
-      },
+      user
     ];
     setUsers(arr);
+    setCurrentUser({
+      id:user.id,
+      userName:user.userName,
+      email: user.email
+    });
     reset();
-    navigate("/login");
+    navigate("/home");
   };
 
   const logout = () => {
     setCurrentUser(null);
-    toast.info("Hope you visit soon.",{
-      position:'top-center'
-    })
+    toast.info("Hope you visit soon.", {
+      position: "top-center",
+    });
     navigate("/login");
     return;
   };

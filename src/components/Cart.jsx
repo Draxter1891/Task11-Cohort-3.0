@@ -3,9 +3,20 @@ import { useContext, useRef } from "react";
 import { useNavigate } from "react-router";
 import useClickOutside from "../hooks/useClickOutside";
 import { Products } from "../context/ProductContext";
+import { MyCart } from "../context/CartContext";
 
 const Cart = () => {
   const { setIsCartOpen, isCartOpen } = useContext(Products);
+  const {
+    cartProducts,
+    setCartProducts,
+    handleAddToCart,
+    handleIncreaseItem,
+    handleDecreaseItem,
+    emptyCart
+  } = useContext(MyCart);
+  
+  
   const navigate = useNavigate();
   const cartRef = useRef(null);
   useClickOutside(cartRef, () => setIsCartOpen(false), isCartOpen);
@@ -35,7 +46,9 @@ const Cart = () => {
         </div>
 
         {/* Empty State */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6">
+        {cartProducts.length>0?(<div>
+          <button onClick={()=>emptyCart()} className="text-red-700 bg-red-700/20 rounded-2xl px-5 py-2 font-[clash] font-bold block mx-auto mt-10 cursor-pointer transition-all duration-300 ease-in-out active:scale-95">Empty Cart</button>
+        </div>):(<div className="flex-1 flex flex-col items-center justify-center px-6">
           <div className="h-24 w-24 rounded-3xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
             <Package size={42} className="text-zinc-500" strokeWidth={1.5} />
           </div>
@@ -57,7 +70,8 @@ const Cart = () => {
           >
             Browse Products
           </button>
-        </div>
+        </div>)}
+        
       </div>
     </div>
   );

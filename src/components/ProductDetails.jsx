@@ -18,12 +18,15 @@ import { Products } from "../context/ProductContext";
 import axios from "axios";
 import { Atom } from "react-loading-indicators";
 import RelatedProductCard from "./RelatedProductCard";
+import { MyCart } from "../context/CartContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { products } = useContext(Products);
+  const { handleAddToCart, handleIncreaseItem, handleDecreaseItem } =
+    useContext(MyCart);
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(1);
@@ -70,9 +73,8 @@ const ProductDetails = () => {
       elem.category === product.category && elem.title !== product.title,
   );
 
-//   circular array implementation
-  const productIds = products
-    .map((elem) => elem.id)
+  //   circular array implementation
+  const productIds = products.map((elem) => elem.id);
 
   const currentProductIndex = productIds.indexOf(product.id);
   const previousProductId =
@@ -185,6 +187,7 @@ const ProductDetails = () => {
                     setQuantity((prev) =>
                       Math.max(product.minimumOrderQuantity, prev - 1),
                     );
+                    handleDecreaseItem(Number(id));
                   }}
                   className="border-r border-zinc-700 p-2 transition hover:bg-zinc-800"
                 >
@@ -196,7 +199,10 @@ const ProductDetails = () => {
                 </span>
 
                 <button
-                  onClick={() => setQuantity((prev) => prev + 1)}
+                  onClick={() => {
+                    setQuantity((prev) => prev + 1);
+                    handleIncreaseItem(Number(id));
+                  }}
                   className="border-l border-zinc-700 p-2 transition hover:bg-zinc-800"
                 >
                   <Plus size={18} />
@@ -214,7 +220,12 @@ const ProductDetails = () => {
             {/* Buttons */}
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <button className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-lime-400 px-8 py-4 font-semibold text-black transition duration-300 cursor-pointer hover:scale-[1.03]">
+              <button
+                onClick={() => {
+                  handleAddToCart(Number(id));
+                }}
+                className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-lime-400 px-8 py-4 font-semibold text-black transition duration-300 cursor-pointer hover:scale-[1.03]"
+              >
                 <ShoppingCart size={20} />
                 Add To Cart
               </button>

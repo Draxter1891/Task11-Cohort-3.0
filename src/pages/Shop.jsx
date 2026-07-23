@@ -2,9 +2,15 @@ import React, { useContext } from "react";
 import { Products } from "../context/ProductContext";
 import ProductsCard from "../components/ProductsCard";
 import { Atom } from "react-loading-indicators";
+import { MyCart } from "../context/CartContext";
+import { Auth } from "../context/AuthContext";
 
 const Shop = () => {
   const { products, isLoading, error } = useContext(Products);
+  const {cartProducts, setCartProducts} = useContext(MyCart);
+  const {currentUser,users} = useContext(Auth);
+  
+  
 
   if (isLoading) {
     return (

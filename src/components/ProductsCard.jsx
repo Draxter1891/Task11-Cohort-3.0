@@ -1,13 +1,9 @@
-import React from "react";
-import {
-  Heart,
-  ShoppingCart,
-  Star,
-  BadgeCheck,
-} from "lucide-react";
+import React, { useContext } from "react";
+import { Heart, ShoppingCart, Star, BadgeCheck } from "lucide-react";
 import { useNavigate } from "react-router";
+import { MyCart } from "../context/CartContext";
 
-const Product = ({ product }) => {
+const ProductsCard = ({ product }) => {
   const {
     id,
     title,
@@ -22,19 +18,19 @@ const Product = ({ product }) => {
     reviews,
   } = product;
 
-  const originalPrice = (
-    price /
-    (1 - discountPercentage / 100)
-  ).toFixed(2);
+  const { handleAddToCart } = useContext(MyCart);
 
-  const navigate = useNavigate()
+  const originalPrice = (price / (1 - discountPercentage / 100)).toFixed(2);
+
+  const navigate = useNavigate();
 
   return (
     <div className="group flex flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition-all duration-300 hover:-translate-y-2 hover:border-lime-400 hover:shadow-2xl hover:shadow-lime-500/10">
-
       {/* Image */}
-      <div onClick={()=>navigate(`/shop/details/${id}`)} className="relative overflow-hidden bg-zinc-950">
-
+      <div
+        onClick={() => navigate(`/shop/details/${id}`)}
+        className="relative overflow-hidden bg-zinc-950"
+      >
         <button className="absolute right-4 top-4 z-8 rounded-full bg-zinc-900/90 p-2 transition hover:bg-lime-400 hover:text-black cursor-pointer">
           <Heart size={18} />
         </button>
@@ -52,7 +48,6 @@ const Product = ({ product }) => {
 
       {/* Content */}
       <div className="flex flex-1 flex-col p-5">
-
         {/* Category */}
         <span className="mb-3 w-fit rounded-full bg-zinc-800 px-3 py-1 text-xs font-medium capitalize text-lime-400">
           {category}
@@ -65,13 +60,10 @@ const Product = ({ product }) => {
 
         {/* Brand & Rating */}
         <div className="mt-3 flex items-center justify-between text-sm">
-
           <div className="flex items-center gap-1 text-yellow-400">
             <Star size={16} fill="currentColor" />
             <span>{rating}</span>
-            <span className="text-zinc-500">
-              ({reviews.length})
-            </span>
+            <span className="text-zinc-500">({reviews.length})</span>
           </div>
 
           <div className="flex items-center gap-1 text-zinc-400">
@@ -104,18 +96,15 @@ const Product = ({ product }) => {
 
         {/* Price */}
         <div className="mt-6 flex items-end justify-between">
-
           <div>
             <p className="text-sm text-zinc-500 line-through">
               ${originalPrice}
             </p>
 
-            <p className="text-xl font-bold text-lime-400">
-              ${price}
-            </p>
+            <p className="text-xl font-bold text-lime-400">${price}</p>
           </div>
 
-          <button className="flex items-center gap-1 rounded-2xl bg-lime-400 px-5 py-3 font-semibold text-black transition hover:scale-105 cursor-pointer">
+          <button onClick={()=>handleAddToCart(id)} className="flex items-center gap-1 rounded-2xl bg-lime-400 px-5 py-3 font-semibold text-black transition hover:scale-105 cursor-pointer">
             <ShoppingCart size={18} />
             Add
           </button>
@@ -125,4 +114,4 @@ const Product = ({ product }) => {
   );
 };
 
-export default Product;
+export default ProductsCard;
