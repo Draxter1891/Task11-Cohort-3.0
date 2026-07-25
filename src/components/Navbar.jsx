@@ -3,13 +3,14 @@ import { ShoppingCart, LogOut, Zap, Menu, X } from "lucide-react";
 import { useContext, useRef, useState } from "react";
 import Cart from "./Cart";
 import { Auth } from "../context/AuthContext";
-import { Products } from "../context/ProductContext";
+import { MyProducts } from "../context/ProductContext";
 import useClickOutside from "../hooks/useClickOutside";
+import { MyCart } from "../context/CartContext";
 
 const Navbar = () => {
   const { currentUser, logout } = useContext(Auth);
-  const { toggle, setToggle, isCartOpen, setIsCartOpen } = useContext(Products);
-
+  const { toggle, setToggle } = useContext(MyProducts);
+  const { isCartOpen, setIsCartOpen } = useContext(MyCart);
   const menuRef = useRef(null);
 
   useClickOutside(menuRef, () => setToggle(false), toggle);

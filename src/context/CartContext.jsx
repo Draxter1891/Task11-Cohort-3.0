@@ -1,13 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Products } from "./ProductContext";
+import { MyProducts } from "./ProductContext";
 import { Auth } from "./AuthContext";
+import { toast } from "react-toastify";
 
 export const MyCart = createContext();
 
 export const CartContext = ({ children }) => {
-  const { products } = useContext(Products);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const { products } = useContext(MyProducts);
   const [cartProducts, setCartProducts] = useState([]);
   const { currentUser, users, setUsers } = useContext(Auth);
+  const [cartTotal, setCartTotal] = useState(0);
 
   useEffect(() => {
     if (!currentUser) {
@@ -21,10 +25,8 @@ export const CartContext = ({ children }) => {
   }, [currentUser, users]);
 
   const handleAddToCart = (id) => {
-    console.log(id);
     const clickedProduct = products.find((elem) => elem.id === id);
 
-    console.log(clickedProduct);
     if (!clickedProduct || !currentUser) return;
 
     const existingItem = cartProducts.find((elem) => elem.id === id);
@@ -46,43 +48,70 @@ export const CartContext = ({ children }) => {
         ];
     setCartProducts(updatedCart);
 
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === currentUser.id ? { ...user, cartItems: updatedCart } : user,
-      ),
-    );
+    updateCartItems(updatedCart)
   };
 
-  console.log(cartProducts);
-
   const handleIncreaseItem = (id) => {
-    cartProducts.map((elem) =>
-      elem.id === id ? { ...elem, quantity: elem.quantity + 1 } : elem,
+    let currentProd = products.find((elem) => elem.id === id);
+    let existingItem = cartProducts.find((elem) => elem.id === id);
+
+    // Safety checks: if the user clicks rapidly on quantity change and UI has still not updated || if the products hasn't been loaded yet || if the user logged out but the component has still not unmounted yet
+    if (!existingItem || !currentProd || !currentUser) return;
+
+    if (existingItem.quantity >= currentProd.stocks) {
+      toast.error("We appreciate your interest but, have limited stocks :(");
+      return;
+    }
+
+    const updatedCart = cartProducts.map((prod) =>
+      prod.id === id ? { ...prod, quantity: prod.quantity + 1 } : prod,
     );
 
     setCartProducts(updatedCart);
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === currentUser.id ? { ...user, cartItems: updatedCart } : user,
-      ),
-    );
+    updateCartItems(updatedCart);
   };
 
   const handleDecreaseItem = (id) => {
-    console.log(`decrease clicked for: id - ${id}`);
+    let currentProd = products.find((elem) => elem.id === id);
+    const existingItem = cartProducts.find((elem) => elem.id === id);
+
+    if (!existingItem || !currentProd || !currentUser) return;
+
+    const updatedCart =
+      existingItem.quantity <= currentProd.minimumOrderQuantity
+        ? cartProducts.filter((prod) => prod.id !== id)
+        : cartProducts.map((prod) =>
+            prod.id === id ? { ...prod, quantity: prod.quantity - 1 } : prod,
+          );
+
+    setCartProducts(updatedCart);
+
+    // localStorage me updation ke liye!
+    updateCartItems(updatedCart);
   };
 
   const emptyCart = () => {
-    console.log("Empty cart clicked!");
     setCartProducts([]);
+    updateCartItems();
+  };
 
+  const updateCartItems = (updatedValues = []) => {
     setUsers((prev) =>
       prev.map((user) =>
-        user.id === currentUser.id ? { ...user, cartItems: [] } : user,
+        user.id === currentUser.id
+          ? { ...user, cartItems: updatedValues }
+          : user,
       ),
     );
-    console.log(users)
   };
+
+  useEffect(() => {
+    let total = cartProducts.reduce((acc, current) => {
+      acc += current.price * current.quantity;
+      return acc;
+    }, 0);
+    setCartTotal(total);
+  }, [cartProducts]);
   return (
     <MyCart.Provider
       value={{
@@ -92,6 +121,9 @@ export const CartContext = ({ children }) => {
         handleIncreaseItem,
         handleDecreaseItem,
         emptyCart,
+        cartTotal,
+        isCartOpen,
+        setIsCartOpen,
       }}
     >
       {children}

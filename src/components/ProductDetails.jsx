@@ -14,7 +14,7 @@ import {
   BadgeCheck,
 } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router";
-import { Products } from "../context/ProductContext";
+import { MyProducts } from "../context/ProductContext";
 import axios from "axios";
 import { Atom } from "react-loading-indicators";
 import RelatedProductCard from "./RelatedProductCard";
@@ -24,13 +24,18 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { products } = useContext(Products);
-  const { handleAddToCart, handleIncreaseItem, handleDecreaseItem } =
-    useContext(MyCart);
+  const { products, handleAddToFavourites } = useContext(MyProducts);
+  const {
+    handleAddToCart,
+    handleIncreaseItem,
+    handleDecreaseItem,
+    cartProducts,
+  } = useContext(MyCart);
   const [isLoading, setIsLoading] = useState(false);
   const [product, setProduct] = useState();
   const [quantity, setQuantity] = useState(1);
   const [isFavourite, setIsFavourite] = useState(false);
+  let currentProd = cartProducts.find((prod) => prod.id === Number(id));
 
   const getSingleProduct = async () => {
     try {
@@ -176,62 +181,63 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Quantity */}
-
-            <div className="mt-5">
-              <p className="mb-1 text-sm text-zinc-500">Quantity</p>
-
-              <div className="flex w-fit items-center overflow-hidden rounded-xl border border-zinc-700">
-                <button
-                  onClick={() => {
-                    setQuantity((prev) =>
-                      Math.max(product.minimumOrderQuantity, prev - 1),
-                    );
-                    handleDecreaseItem(Number(id));
-                  }}
-                  className="border-r border-zinc-700 p-2 transition hover:bg-zinc-800"
-                >
-                  <Minus size={18} />
-                </button>
-
-                <span className="w-10 text-center text-base font-semibold">
-                  {quantity}
-                </span>
-
-                <button
-                  onClick={() => {
-                    setQuantity((prev) => prev + 1);
-                    handleIncreaseItem(Number(id));
-                  }}
-                  className="border-l border-zinc-700 p-2 transition hover:bg-zinc-800"
-                >
-                  <Plus size={18} />
-                </button>
-              </div>
-
-              <p className="mt-3 text-sm text-zinc-500">
-                Minimum Order :
-                <span className="ml-2 text-lime-400">
-                  {product.minimumOrderQuantity}
-                </span>
-              </p>
-            </div>
-
             {/* Buttons */}
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <button
-                onClick={() => {
-                  handleAddToCart(Number(id));
-                }}
-                className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-lime-400 px-8 py-4 font-semibold text-black transition duration-300 cursor-pointer hover:scale-[1.03]"
-              >
-                <ShoppingCart size={20} />
-                Add To Cart
-              </button>
+              {currentProd &&
+              currentProd.quantity >= product.minimumOrderQuantity ? (
+                <div className="mt-5">
+                  <p className="mb-1 text-sm text-zinc-500">Quantity</p>
+
+                  <div className="flex w-fit items-center overflow-hidden rounded-xl border border-zinc-700">
+                    <button
+                      onClick={() => {
+                        setQuantity((prev) =>
+                          Math.max(product.minimumOrderQuantity, prev - 1),
+                        );
+                        handleDecreaseItem(Number(id));
+                      }}
+                      className="border-r border-zinc-700 p-2 transition hover:bg-zinc-800"
+                    >
+                      <Minus size={18} />
+                    </button>
+
+                    <span className="w-10 text-center text-base font-semibold">
+                      {currentProd.quantity}
+                    </span>
+
+                    <button
+                      onClick={() => {
+                        setQuantity((prev) => prev + 1);
+                        handleIncreaseItem(Number(id));
+                      }}
+                      className="border-l border-zinc-700 p-2 transition hover:bg-zinc-800"
+                    >
+                      <Plus size={18} />
+                    </button>
+                  </div>
+
+                  <p className="mt-3 text-sm text-zinc-500">
+                    Minimum Order :
+                    <span className="ml-2 text-lime-400">
+                      {product.minimumOrderQuantity}
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    handleAddToCart(Number(id));
+                  }}
+                  className="flex flex-1 items-center justify-center gap-3 rounded-2xl bg-lime-400 px-8 py-4 font-semibold text-black transition duration-300 cursor-pointer hover:scale-[1.03]"
+                >
+                  <ShoppingCart size={20} />
+                  Add To Cart
+                </button>
+              )}
 
               <button
-                onClick={() => setIsFavourite((prev) => !prev)}
+                onClick={() => handleAddToFavourites(Number(id))}
                 className={`flex items-center justify-center rounded-2xl border border-zinc-700 p-4 transition hover:border-red-400 hover:text-red-400 ${isFavourite ? "bg-red-500/20" : ""}`}
               >
                 {isFavourite ? (

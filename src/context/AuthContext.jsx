@@ -66,6 +66,7 @@ export const AuthContext = ({ children }) => {
       email: email.toLowerCase(),
       password,
       cartItems: [],
+      favourites:[]
     };
     let arr = [
       ...users,

@@ -6,11 +6,10 @@ import {
   SoapDispenserDroplet,
 } from "lucide-react";
 
-const CategoryCard = ({ icon: Icon, name, totalProducts }) => {
-  
+const CategoryCard = ({ icon: Icon, name, totalProducts, hover }) => {
   return (
     <button
-      className="
+      className={`
         group
         relative
         overflow-hidden
@@ -21,17 +20,16 @@ const CategoryCard = ({ icon: Icon, name, totalProducts }) => {
         px-6
         py-4
         text-left
-        cursor-pointer
+        
         transition-all
         duration-300
-        hover:-translate-y-2
-        hover:border-lime-400/40
-        hover:shadow-[0_0_35px_rgba(196,255,0,.08)]
-      "
+        
+        ${hover ? "cursor-pointer hover:-translate-y-2 hover:border-lime-400/40 hover:shadow-[0_0_35px_rgba(196,255,0,.08)]" : ""}
+      `}
     >
       {/* Glow */}
       <div
-        className="
+        className={`
           absolute
           -right-10
           -top-10
@@ -43,13 +41,14 @@ const CategoryCard = ({ icon: Icon, name, totalProducts }) => {
           opacity-0
           transition-opacity
           duration-300
-          group-hover:opacity-100
-        "
+          ${hover ? "group-hover:opacity-100" : ""}
+          
+        `}
       />
 
       {/* Icon */}
       <div
-        className="
+        className={`
           relative
           mb-4
           flex
@@ -62,8 +61,8 @@ const CategoryCard = ({ icon: Icon, name, totalProducts }) => {
           text-[#D7FF00]
           transition-all
           duration-300
-          group-hover:bg-lime-400/20
-        "
+          ${hover ? "group-hover:bg-lime-400/20" : ""}
+        `}
       >
         <Icon size={22} />
       </div>
@@ -72,21 +71,20 @@ const CategoryCard = ({ icon: Icon, name, totalProducts }) => {
       <h3 className="text-xl font-semibold text-white font-[clash]">{name}</h3>
 
       {/* Footer */}
-      <div className="mt-6 flex items-center justify-between">
-        <p className="text-sm text-zinc-500">{totalProducts} Products</p>
+      {hover && (
+        <div className="mt-6 flex items-center justify-between">
+          <p className="text-sm text-zinc-500">{totalProducts} Products</p>
 
-        <ArrowUpRight
-          size={20}
-          className="
+          <ArrowUpRight
+            size={20}
+            className="
             text-zinc-500
             transition-all
             duration-300
-            group-hover:translate-x-1
-            group-hover:-translate-y-1
-            group-hover:text-[#D7FF00]
-          "
-        />
-      </div>
+            group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-[#D7FF00]"
+          />
+        </div>
+      )}
     </button>
   );
 };

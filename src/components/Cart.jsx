@@ -2,21 +2,20 @@ import { Package, ShoppingBag, X } from "lucide-react";
 import { useContext, useRef } from "react";
 import { useNavigate } from "react-router";
 import useClickOutside from "../hooks/useClickOutside";
-import { Products } from "../context/ProductContext";
 import { MyCart } from "../context/CartContext";
 
 const Cart = () => {
-  const { setIsCartOpen, isCartOpen } = useContext(Products);
   const {
     cartProducts,
     setCartProducts,
     handleAddToCart,
     handleIncreaseItem,
     handleDecreaseItem,
-    emptyCart
+    emptyCart,
+    isCartOpen,
+    setIsCartOpen,
   } = useContext(MyCart);
-  
-  
+
   const navigate = useNavigate();
   const cartRef = useRef(null);
   useClickOutside(cartRef, () => setIsCartOpen(false), isCartOpen);
@@ -46,32 +45,40 @@ const Cart = () => {
         </div>
 
         {/* Empty State */}
-        {cartProducts.length>0?(<div>
-          <button onClick={()=>emptyCart()} className="text-red-700 bg-red-700/20 rounded-2xl px-5 py-2 font-[clash] font-bold block mx-auto mt-10 cursor-pointer transition-all duration-300 ease-in-out active:scale-95">Empty Cart</button>
-        </div>):(<div className="flex-1 flex flex-col items-center justify-center px-6">
-          <div className="h-24 w-24 rounded-3xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
-            <Package size={42} className="text-zinc-500" strokeWidth={1.5} />
+        {cartProducts.length > 0 ? (
+          <div>
+            <button
+              onClick={() => emptyCart()}
+              className="text-red-700 bg-red-700/20 rounded-2xl px-5 py-2 font-[clash] font-bold block mx-auto mt-10 cursor-pointer transition-all duration-300 ease-in-out active:scale-95"
+            >
+              Empty Cart
+            </button>
           </div>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center px-6">
+            <div className="h-24 w-24 rounded-3xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+              <Package size={42} className="text-zinc-500" strokeWidth={1.5} />
+            </div>
 
-          <h3 className="mt-6 text-xl font-semibold font-[clash] text-zinc-200">
-            Cart is empty
-          </h3>
+            <h3 className="mt-6 text-xl font-semibold font-[clash] text-zinc-200">
+              Cart is empty
+            </h3>
 
-          <p className="text-zinc-500 text-base">
-            Explore our wide variety of products!
-          </p>
+            <p className="text-zinc-500 text-base">
+              Explore our wide variety of products!
+            </p>
 
-          <button
-            onClick={() => {
-              setIsCartOpen(false);
-              navigate("/shop");
-            }}
-            className="mt-10 px-5 py-3 rounded-2xl font-[clash] bg-lime-400 text-black font-semibold hover:bg-lime-300 transition cursor-pointer"
-          >
-            Browse Products
-          </button>
-        </div>)}
-        
+            <button
+              onClick={() => {
+                setIsCartOpen(false);
+                navigate("/shop");
+              }}
+              className="mt-10 px-5 py-3 rounded-2xl font-[clash] bg-lime-400 text-black font-semibold hover:bg-lime-300 transition cursor-pointer"
+            >
+              Browse Products
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

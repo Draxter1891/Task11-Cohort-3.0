@@ -20,13 +20,13 @@ import { useNavigate } from "react-router";
 import HeroComponent from "../components/HeroComponent";
 import StatCard from "../components/StatCard";
 import CategoryCard from "../components/CategoryCard";
-import { Products } from "../context/ProductContext";
+import { MyProducts } from "../context/ProductContext";
 import { nanoid } from "nanoid";
 
 const Home = () => {
   const navigate = useNavigate();
   const { currentUser } = useContext(Auth);
-  const { products } = useContext(Products);
+  const { products } = useContext(MyProducts);
 
   let categories = products.map((elem) => {
     return elem.category;
@@ -111,9 +111,10 @@ const Home = () => {
           {categoryCount.map((elem) => (
             <CategoryCard
               key={elem.id}
-              icon = {iconNames[elem.name]}
+              icon={iconNames[elem.name]}
               name={elem.name}
               totalProducts={elem.totalCount}
+              hover={true}
             />
           ))}
         </div>

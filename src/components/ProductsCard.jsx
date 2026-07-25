@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Heart, ShoppingCart, Star, BadgeCheck } from "lucide-react";
 import { useNavigate } from "react-router";
 import { MyCart } from "../context/CartContext";
+import { MyProducts } from "../context/ProductContext";
 
 const ProductsCard = ({ product }) => {
   const {
@@ -19,7 +20,13 @@ const ProductsCard = ({ product }) => {
   } = product;
 
   const { handleAddToCart } = useContext(MyCart);
+  const { handleAddToFavourites, favourites } = useContext(MyProducts);
+  console.log("product rerendering....");
+  const existFavo = () => {
+    return favourites.some((elem) => elem.id === id);
+  };
 
+  let isFavourite = existFavo();
   const originalPrice = (price / (1 - discountPercentage / 100)).toFixed(2);
 
   const navigate = useNavigate();
@@ -27,15 +34,20 @@ const ProductsCard = ({ product }) => {
   return (
     <div className="group flex flex-col overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900 transition-all duration-300 hover:-translate-y-2 hover:border-lime-400 hover:shadow-2xl hover:shadow-lime-500/10">
       {/* Image */}
-      <div
-        onClick={() => navigate(`/shop/details/${id}`)}
-        className="relative overflow-hidden bg-zinc-950"
-      >
-        <button className="absolute right-4 top-4 z-8 rounded-full bg-zinc-900/90 p-2 transition hover:bg-lime-400 hover:text-black cursor-pointer">
-          <Heart size={18} />
+      <div className="relative overflow-hidden bg-zinc-950">
+        <button
+          onClick={() => handleAddToFavourites(Number(id))}
+          className="absolute right-4 top-4 z-8 rounded-full bg-zinc-900/90 p-2 transition hover:bg-red-400 hover:text-black cursor-pointer"
+        >
+          {isFavourite ? (
+            <Heart size={18} fill="red" stroke="red" />
+          ) : (
+            <Heart size={18} />
+          )}
         </button>
 
         <img
+          onClick={() => navigate(`/shop/details/${id}`)}
           src={thumbnail}
           alt={title}
           className="h-72 w-full object-contain p-6 transition duration-500 group-hover:scale-110"
@@ -104,7 +116,10 @@ const ProductsCard = ({ product }) => {
             <p className="text-xl font-bold text-lime-400">${price}</p>
           </div>
 
-          <button onClick={()=>handleAddToCart(id)} className="flex items-center gap-1 rounded-2xl bg-lime-400 px-5 py-3 font-semibold text-black transition hover:scale-105 cursor-pointer">
+          <button
+            onClick={() => handleAddToCart(id)}
+            className="flex items-center gap-1 rounded-2xl bg-lime-400 px-5 py-3 font-semibold text-black transition hover:scale-105 cursor-pointer"
+          >
             <ShoppingCart size={18} />
             Add
           </button>
