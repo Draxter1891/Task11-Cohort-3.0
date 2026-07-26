@@ -58,7 +58,7 @@ const Home = () => {
   };
 
   return (
-    <div className="px-15 py-8">
+    <div className="px-6 py-8">
       {/* Hero section */}
       <HeroComponent />
       {/* Stats section */}

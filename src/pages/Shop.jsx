@@ -28,14 +28,14 @@ const Shop = () => {
   }
 
   return (
-    <div onClick={() => {}} className="flex flex-col text-white px-10">
+    <div className="flex flex-col text-white px-5">
       <h1 className="mt-5 font-bold text-4xl font-[clash]">All Products</h1>
       <p className="mb-10 text-base text-zinc-500">
         {products.length} products found
       </p>
 
       <Filter />
-      <div className="grid gap-8 grid-cols-1 md:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-2 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
         {products.map((elem) => (
           <ProductsCard key={elem.id} product={elem} />
         ))}

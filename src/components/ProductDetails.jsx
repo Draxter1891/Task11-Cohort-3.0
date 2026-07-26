@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ChevronLeft,
@@ -24,7 +24,8 @@ const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { products, handleAddToFavourites } = useContext(MyProducts);
+  const { products, favourites, handleAddToFavourites } =
+    useContext(MyProducts);
   const {
     handleAddToCart,
     handleIncreaseItem,
@@ -32,56 +33,60 @@ const ProductDetails = () => {
     cartProducts,
   } = useContext(MyCart);
   const [isLoading, setIsLoading] = useState(false);
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [isFavourite, setIsFavourite] = useState(false);
-  let currentProd = cartProducts.find((prod) => prod.id === Number(id));
+  const isFavourite = favourites.some((elem) => elem.id === Number(id));
 
-  const getSingleProduct = async () => {
-    try {
-      setIsLoading(true);
-      const res = await axios.get(`https://dummyjson.com/products/${id}`);
-
-      const data = res.data;
-      setProduct(data);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const currentProd = cartProducts.find((prod) => prod.id === Number(id));
 
   useEffect(() => {
+    let isMounted = true;
+
+    const getSingleProduct = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get(`https://dummyjson.com/products/${id}`);
+
+        if (isMounted) {
+          setProduct(res.data);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error(error.message);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
     getSingleProduct();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
   useEffect(() => {
     if (product) {
-      setQuantity(product.minimumOrderQuantity);
+      setQuantity(product.minimumOrderQuantity ?? 1);
     }
   }, [product]);
 
-  if (isLoading) {
-    return (
-      <div className="flex h-[70vh] items-center justify-center">
-        <Atom color="#32cd32" size="medium" text="" textColor="" />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return <h1>Product not found</h1>;
-  }
-
-  const relatedProducts = products.filter(
-    (elem) =>
-      elem.category === product.category && elem.title !== product.title,
+  const relatedProducts = useMemo(
+    () =>
+      products.filter(
+        (elem) =>
+          elem.category === product?.category && elem.title !== product?.title,
+      ),
+    [products, product?.category, product?.title],
   );
 
   //   circular array implementation
-  const productIds = products.map((elem) => elem.id);
+  const productIds = useMemo(() => products.map((elem) => elem.id), [products]);
 
-  const currentProductIndex = productIds.indexOf(product.id);
+  const currentProductIndex = productIds.indexOf(product?.id);
   const previousProductId =
     currentProductIndex > 0
       ? productIds[currentProductIndex - 1]
@@ -90,11 +95,30 @@ const ProductDetails = () => {
     currentProductIndex >= 0 && currentProductIndex < productIds.length - 1
       ? productIds[currentProductIndex + 1]
       : productIds[0];
-  const originalPrice = (
-    product.price /
-    (1 - product.discountPercentage / 100)
-  ).toFixed(2);
 
+  const originalPrice = useMemo(() => {
+    const price = product?.price ?? 0;
+    const discountPercentage = product?.discountPercentage ?? 0;
+
+    if (!price) return "0.00";
+
+    return (price / (1 - discountPercentage / 100)).toFixed(2);
+  }, [product?.price, product?.discountPercentage]);
+
+  const reviews = product?.reviews ?? [];
+  const tags = product?.tags ?? [];
+  const dimensions = product?.dimensions ?? {};
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[70vh] items-center justify-center">
+        <Atom color="#32cd32" size="medium" text="" textColor="" />
+      </div>
+    );
+  }
+  if (!product) {
+    return <h1>Product not found</h1>;
+  }
   return (
     <section className="min-h-screen bg-zinc-950 px-6 py-10 text-white">
       <div className="mx-auto max-w-7xl">
@@ -139,7 +163,7 @@ const ProductDetails = () => {
                 <span>{product.rating}</span>
 
                 <span className="text-zinc-500">
-                  ({product.reviews.length} Reviews)
+                  ({reviews.length} Reviews)
                 </span>
               </div>
 
@@ -183,7 +207,7 @@ const ProductDetails = () => {
 
             {/* Buttons */}
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-2 justify-between items-center">
               {currentProd &&
               currentProd.quantity >= product.minimumOrderQuantity ? (
                 <div className="mt-5">
@@ -192,12 +216,9 @@ const ProductDetails = () => {
                   <div className="flex w-fit items-center overflow-hidden rounded-xl border border-zinc-700">
                     <button
                       onClick={() => {
-                        setQuantity((prev) =>
-                          Math.max(product.minimumOrderQuantity, prev - 1),
-                        );
                         handleDecreaseItem(Number(id));
                       }}
-                      className="border-r border-zinc-700 p-2 transition hover:bg-zinc-800"
+                      className="border-r border-zinc-700 p-4 transition hover:bg-zinc-800"
                     >
                       <Minus size={18} />
                     </button>
@@ -208,10 +229,9 @@ const ProductDetails = () => {
 
                     <button
                       onClick={() => {
-                        setQuantity((prev) => prev + 1);
                         handleIncreaseItem(Number(id));
                       }}
-                      className="border-l border-zinc-700 p-2 transition hover:bg-zinc-800"
+                      className="border-l border-zinc-700 p-4 transition hover:bg-zinc-800"
                     >
                       <Plus size={18} />
                     </button>
@@ -237,8 +257,10 @@ const ProductDetails = () => {
               )}
 
               <button
-                onClick={() => handleAddToFavourites(Number(id))}
-                className={`flex items-center justify-center rounded-2xl border border-zinc-700 p-4 transition hover:border-red-400 hover:text-red-400 ${isFavourite ? "bg-red-500/20" : ""}`}
+                onClick={() => {
+                  handleAddToFavourites(Number(id));
+                }}
+                className={`h-fit flex items-center justify-center rounded-2xl border border-zinc-700 p-4 transition hover:border-red-400 hover:text-red-400 ${isFavourite ? "bg-red-500/20" : ""}`}
               >
                 {isFavourite ? (
                   <Heart size={22} stroke="red" fill="red" />
@@ -333,8 +355,7 @@ const ProductDetails = () => {
               <span className="text-zinc-500">Dimensions</span>
 
               <span>
-                {product.dimensions.width} × {product.dimensions.height} ×{" "}
-                {product.dimensions.depth} cm
+                {dimensions.width} × {dimensions.height} × {dimensions.depth} cm
               </span>
             </div>
 
@@ -352,7 +373,7 @@ const ProductDetails = () => {
           <h2 className="mb-6 font-[clash] text-3xl font-bold">Tags</h2>
 
           <div className="flex flex-wrap gap-4">
-            {product.tags.map((tag) => (
+            {tags.map((tag) => (
               <span
                 key={tag}
                 className="rounded-full border border-lime-500/30 bg-lime-400/10 px-5 py-2 capitalize text-lime-400"
@@ -371,7 +392,7 @@ const ProductDetails = () => {
           </h2>
 
           <div className="space-y-6">
-            {product.reviews.map((review, index) => (
+            {reviews.map((review, index) => (
               <div
                 key={index}
                 className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6 transition hover:border-lime-400"

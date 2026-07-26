@@ -23,7 +23,7 @@ const About = () => {
     { name: "Dhan", role: "Finance", initial: "D" },
   ];
   return (
-    <div className="px-15 py-12">
+    <div className="px-8 py-12">
       {/* Header */}
       <div className="text-center text-white">
         <div className="flex items-center justify-center">
@@ -87,7 +87,7 @@ const About = () => {
           <h2 className="text-2xl font-[clash] text-white mb-4 ">Our Story</h2>
 
           <p className="text-zinc-400 leading-relaxed ">
-            SkyMart started in 2022 as a small side project — two engineers
+            SkyMart started in 2022 as a small side project - two engineers
             tired of bloated, slow e-commerce experiences. We asked ourselves:
             what if shopping online was actually enjoyable?
           </p>
@@ -95,7 +95,7 @@ const About = () => {
           <p className="text-zinc-400 leading-relaxed mt-4">
             Three years later, SkyMart serves over 50,000 customers across the
             country. We stock electronics, fashion, jewelry, and everyday
-            essentials — all at prices that don't require a second mortgage.
+            essentials - all at prices that don't require a second mortgage.
           </p>
 
           <p className="text-zinc-400 leading-relaxed mt-4">
@@ -112,7 +112,7 @@ const About = () => {
           What We Stand For
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4  gap-6">
           <CategoryCard
             icon={Shield}
             name={"Trust"}
@@ -151,7 +151,7 @@ const About = () => {
               className="rounded-2xl border border-zinc-600 bg-[#111111] p-6 text-left"
             >
               <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-2xl bg-lime-400/10 flex items-center justify-center text-lime-400 font-bold">
+                <div className="h-12 w-12 rounded-2xl bg-blue-400/10 flex items-center justify-center text-blue-400 font-bold">
                   {t.initial}
                 </div>
 

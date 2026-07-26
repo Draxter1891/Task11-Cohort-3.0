@@ -70,7 +70,7 @@ const HeroComponent = () => {
                 navigate("/shop");
               }}
               className="rounded-full border border-zinc-700
-                px-8 py-4 font-medium text-white
+                px-5 py-4 font-medium text-white
                 transition-all duration-300
                 hover:border-lime-400 hover:bg-lime-400/10 cursor-pointer"
             >
@@ -80,7 +80,7 @@ const HeroComponent = () => {
         </div>
 
         {/* Right */}
-        <div className="flex flex-col gap-5 md:flex-row lg:flex-col">
+        <div className="flex flex-row gap-5 lg:flex-col">
           <div
             className="flex h-40 w-44 flex-col items-center justify-center
               rounded-3xl border border-lime-400/20
@@ -94,8 +94,7 @@ const HeroComponent = () => {
           </div>
 
           <div
-            className="flex h-32 w-44 flex-col items-center justify-center
-              rounded-3xl border border-zinc-300"
+            className="flex w-44 flex-col items-center py-2 justify-center rounded-3xl border border-zinc-300 backdrop-blur-[1px]"
           >
             <h2 className="text-4xl font-bold text-white">Free</h2>
 

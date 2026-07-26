@@ -116,6 +116,7 @@ const Navbar = () => {
         <nav className=" flex flex-col items-start gap-6 text-base ">
           <NavLink
             to="/home"
+            onClick={()=>setToggle(false)}
             className={({ isActive }) =>
               `font-medium transition ${
                 isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
@@ -127,6 +128,7 @@ const Navbar = () => {
 
           <NavLink
             to="/shop"
+            onClick={()=>setToggle(false)}
             className={({ isActive }) =>
               `font-medium transition ${
                 isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
@@ -138,6 +140,7 @@ const Navbar = () => {
 
           <NavLink
             to="/about"
+            onClick={()=>setToggle(false)}
             className={({ isActive }) =>
               `font-medium transition ${
                 isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"

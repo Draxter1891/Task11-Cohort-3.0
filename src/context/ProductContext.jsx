@@ -11,7 +11,7 @@ export const ProductContext = ({ children }) => {
   const [error, setError] = useState(null);
   const { users, setUsers, currentUser } = useContext(Auth);
   const [favourites, setFavourites] = useState(() => {
-    const loggedInUser = users.find((user) => user.id === currentUser?.id);
+  const loggedInUser = users.find((user) => user.id === currentUser?.id);
 
     return loggedInUser?.favourites ?? [];
   });
@@ -59,7 +59,7 @@ export const ProductContext = ({ children }) => {
         toggle,
         setToggle,
         handleAddToFavourites,
-        favourites
+        favourites,
       }}
     >
       {children}
