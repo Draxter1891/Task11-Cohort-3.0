@@ -1,27 +1,23 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Search, ChevronDown, X as XIcon } from "lucide-react";
+import { MyProducts } from "../context/ProductContext";
 
 const Filter = () => {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("All Category");
-  const [sort, setSort] = useState("Featured");
-  const [tags, setTags] = useState([]);
+  const { products, filters, updateFilters, clearFilters } = useContext(MyProducts);
 
-  const removeTag = (t) => setTags((s) => s.filter((x) => x !== t));
-  const clearAll = () => {
-    setTags([]);
-    setQuery("");
-    setCategory("");
-    setSort("");
-  };
-
-  const onSearchKey = (e) => {
-    if (e.key === "Enter" && query.trim()) {
-      const q = query.trim();
-      if (!tags.includes(q)) setTags((s) => [...s, q]);
-      setQuery("");
-    }
-  };
+  const categories = ["All", ...new Set(products.map((product) => product.category))];
+  
+  const activeFilters = [
+    filters.query.trim()
+      ? { key: "query", label: `Name: ${filters.query.trim()}` }
+      : null,
+    filters.category !== "All"
+      ? { key: "category", label: `Category: ${filters.category}` }
+      : null,
+    filters.sort !== "Featured"
+      ? { key: "sort", label: `Sort: ${filters.sort}` }
+      : null,
+  ].filter(Boolean);
 
   return (
     <div className=" w-full mb-5 rounded-2xl border border-zinc-600 p-4 bg-[#0d0d0d]">
@@ -31,9 +27,8 @@ const Filter = () => {
           <div className="w-full flex items-center gap-3 flex-1 rounded-full bg-[#111111] px-4 py-3">
             <Search size={18} className="text-zinc-500" />
             <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={onSearchKey}
+              value={filters.query}
+              onChange={(e) => updateFilters({ query: e.target.value })}
               placeholder="Search products..."
               className="flex-1 bg-transparent outline-none text-zinc-200 placeholder-zinc-600"
             />
@@ -43,19 +38,15 @@ const Filter = () => {
             {/* Category select */}
             <div className="relative flex-1 min-w-0">
               <select
-                value={category}
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                  if (!tags.includes(e.target.value.toLowerCase()))
-                    setTags((s) => [...s, e.target.value.toLowerCase()]);
-                }}
+                value={filters.category}
+                onChange={(e) => updateFilters({ category: e.target.value })}
                 className="w-full appearance-none rounded-full bg-[#111111] border border-zinc-700 px-4 py-2 text-zinc-200 text-base"
               >
-                <option>All</option>
-                <option>Beauty</option>
-                <option>Fregrances</option>
-                <option>Furniture</option>
-                <option>Groceries</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
               </select>
               <ChevronDown
                 className="absolute right-3 top-3 text-zinc-400"
@@ -66,12 +57,8 @@ const Filter = () => {
             {/* Sort select */}
             <div className="relative flex-1 min-w-0">
               <select
-                value={sort}
-                onChange={(e) => {
-                  setSort(e.target.value);
-                  if (!tags.includes(e.target.value))
-                    setTags((s) => [...s, e.target.value]);
-                }}
+                value={filters.sort}
+                onChange={(e) => updateFilters({ sort: e.target.value })}
                 className="w-full appearance-none rounded-full bg-[#111111] border border-lime-400/40 px-4 py-2 text-zinc-200"
               >
                 <option>Featured</option>
@@ -87,9 +74,9 @@ const Filter = () => {
             </div>
 
             {/* Clear button */}
-            {tags.length > 0 && (
+            {(filters.query || filters.category !== "All" || filters.sort !== "Featured") && (
               <button
-                onClick={clearAll}
+                onClick={clearFilters}
                 className="flex-0 rounded-full border border-red-600 px-4 py-2 text-red-400"
               >
                 Clear
@@ -98,16 +85,20 @@ const Filter = () => {
           </div>
         </div>
 
-        {/* Active tags */}
+        {/* Active filters */}
         <div className="flex flex-wrap gap-2">
-          {tags.map((t) => (
+          {activeFilters.map((filter) => (
             <div
-              key={t}
+              key={filter.key}
               className="flex items-center gap-2 rounded-full bg-lime-600/10 px-3 py-1 text-sm text-lime-400"
             >
-              <span className="capitalize">{t}</span>
+              <span className="capitalize">{filter.label}</span>
               <button
-                onClick={() => removeTag(t)}
+                onClick={() => {
+                  if (filter.key === "query") updateFilters({ query: "" });
+                  if (filter.key === "category") updateFilters({ category: "All" });
+                  if (filter.key === "sort") updateFilters({ sort: "Featured" });
+                }}
                 className="inline-flex items-center"
               >
                 <XIcon size={14} className="text-lime-400" />

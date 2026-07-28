@@ -32,6 +32,7 @@ const ProductsCard = ({ product }) => {
     cartProducts,
     handleIncreaseItem,
     handleDecreaseItem,
+    setIsCartOpen,
   } = useContext(MyCart);
 
   const { handleAddToFavourites, favourites, products } =
@@ -87,7 +88,7 @@ const ProductsCard = ({ product }) => {
         </h2>
 
         {/* Brand & Rating */}
-        <div className="flex mt-1 sm:mt-3 flex items-center justify-between text-sm">
+        <div className="flex mt-1 sm:mt-3 items-center justify-between text-sm">
           <div className="flex items-center gap-1 text-yellow-400 text-xs">
             <Star size={12} fill="currentColor" />
             <span>{rating}</span>
@@ -96,17 +97,17 @@ const ProductsCard = ({ product }) => {
 
           {/* Stock */}
 
-          {stock > 20 ? (
-            <span className="rounded-full bg-lime-500/10 px-2 py-1 text-sm font-medium text-lime-400">
-              ● In Stock ({stock})
+          {stock <= 0 ? (
+            <span className="rounded-full bg-red-500/10 px-3 py-1 text-sm font-medium text-red-400">
+              ● Out of Stock
             </span>
-          ) : stock > 0 ? (
+          ) : stock < 20 ? (
             <span className="rounded-full bg-orange-500/10 px-3 py-1 text-sm font-medium text-orange-400">
               ● Only {stock} left
             </span>
           ) : (
-            <span className="rounded-full bg-red-500/10 px-1 py-1 text-sm font-medium text-red-400">
-              ● Out of Stock
+            <span className="rounded-full bg-green-500/10 px-3 py-1 text-sm font-medium text-green-400">
+              ● In Stock
             </span>
           )}
         </div>
@@ -165,7 +166,10 @@ const ProductsCard = ({ product }) => {
               </div>
             ) : (
               <button
-                onClick={() => handleAddToCart(id)}
+                onClick={() => {
+                  handleAddToCart(id);
+                  setIsCartOpen(true);
+                }}
                 className="flex items-center gap-1 rounded-xl bg-lime-400 px-5 py-2 font-semibold text-black transition hover:scale-105 cursor-pointer"
               >
                 <ShoppingCart size={18} />

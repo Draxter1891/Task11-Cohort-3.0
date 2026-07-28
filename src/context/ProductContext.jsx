@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Auth } from "./AuthContext";
 
 export const MyProducts = createContext();
@@ -9,9 +9,14 @@ export const ProductContext = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({
+    query: "",
+    category: "All",
+    sort: "Featured",
+  });
   const { users, setUsers, currentUser } = useContext(Auth);
   const [favourites, setFavourites] = useState(() => {
-  const loggedInUser = users.find((user) => user.id === currentUser?.id);
+    const loggedInUser = users.find((user) => user.id === currentUser?.id);
 
     return loggedInUser?.favourites ?? [];
   });
@@ -32,6 +37,51 @@ export const ProductContext = ({ children }) => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const updateFilters = (updates) => {
+    setFilters((prev) => ({ ...prev, ...updates }));
+  };
+
+  const clearFilters = () => {
+    setFilters({ query: "", category: "All", sort: "Featured" });
+  };
+
+  const filteredProducts = useMemo(() => {
+    let result = [...products];
+    const query = filters.query.trim().toLowerCase();
+
+    if (query) {
+      result = result.filter((product) => {
+        const title = product.title?.toLowerCase() ?? "";
+        const description = product.description?.toLowerCase() ?? "";
+        const category = product.category?.toLowerCase() ?? "";
+
+        return (
+          title.includes(query) ||
+          description.includes(query) ||
+          category.includes(query)
+        );
+      });
+    }
+
+    if (filters.category !== "All") {
+      result = result.filter(
+        (product) => product.category?.toLowerCase() === filters.category.toLowerCase(),
+      );
+    }
+
+    if (filters.sort === "Price: Low → High") {
+      result.sort((a, b) => a.price - b.price);
+    } else if (filters.sort === "Price: High → Low") {
+      result.sort((a, b) => b.price - a.price);
+    } else if (filters.sort === "Top Rated") {
+      result.sort((a, b) => b.rating - a.rating);
+    } else if (filters.sort === "Lowest Rated") {
+      result.sort((a, b) => a.rating - b.rating);
+    }
+
+    return result;
+  }, [products, filters]);
 
   const handleAddToFavourites = (id) => {
     const clickedItem = products.find((prod) => prod.id === id);
@@ -60,6 +110,10 @@ export const ProductContext = ({ children }) => {
         setToggle,
         handleAddToFavourites,
         favourites,
+        filters,
+        updateFilters,
+        clearFilters,
+        filteredProducts,
       }}
     >
       {children}

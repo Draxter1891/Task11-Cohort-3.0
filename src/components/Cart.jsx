@@ -3,18 +3,12 @@ import { useContext, useRef } from "react";
 import { useNavigate } from "react-router";
 import useClickOutside from "../hooks/useClickOutside";
 import { MyCart } from "../context/CartContext";
+import CartProduct from "./CartProduct";
+import { toast } from "react-toastify";
 
 const Cart = () => {
-  const {
-    cartProducts,
-    setCartProducts,
-    handleAddToCart,
-    handleIncreaseItem,
-    handleDecreaseItem,
-    emptyCart,
-    isCartOpen,
-    setIsCartOpen,
-  } = useContext(MyCart);
+  const { cartProducts, emptyCart, isCartOpen, setIsCartOpen, cartTotal } =
+    useContext(MyCart);
 
   const navigate = useNavigate();
   const cartRef = useRef(null);
@@ -44,16 +38,38 @@ const Cart = () => {
           </button>
         </div>
 
-        {/* Empty State */}
+        {/* Cart Content */}
         {cartProducts.length > 0 ? (
-          <div>
-            <button
-              onClick={() => emptyCart()}
-              className="text-red-700 bg-red-700/20 rounded-2xl px-5 py-2 font-[clash] font-bold block mx-auto mt-10 cursor-pointer transition-all duration-300 ease-in-out active:scale-95"
-            >
-              Empty Cart
-            </button>
-          </div>
+          <>
+            <div className="flex-1 overflow-y-auto px-6 py-6">
+              <div className="space-y-4">
+                {cartProducts.map((item) => (
+                  <CartProduct key={item.id} item={item} />
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-zinc-700 bg-[#111111] px-6 py-5">
+              <div className="mb-4 flex items-center justify-between text-lg font-semibold text-white">
+                <span>Total</span>
+                <span>${cartTotal.toFixed(2)}</span>
+              </div>
+
+              <button className="mb-3 w-full rounded-2xl bg-lime-400 px-4 py-3 font-[clash] font-semibold text-black transition hover:bg-lime-300">
+                Checkout
+              </button>
+
+              <button
+                onClick={() => {
+                  emptyCart();
+                  toast.success("Cart Items cleared");
+                }}
+                className="w-full rounded-2xl border border-red-700/40 bg-red-700/10 px-4 py-3 font-[clash] font-semibold text-red-400 transition hover:bg-red-700/20"
+              >
+                Clear Cart
+              </button>
+            </div>
+          </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center px-6">
             <div className="h-24 w-24 rounded-3xl bg-zinc-900 border border-zinc-800 flex items-center justify-center">

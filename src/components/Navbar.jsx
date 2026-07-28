@@ -118,7 +118,7 @@ const Navbar = () => {
             to="/home"
             onClick={()=>setToggle(false)}
             className={({ isActive }) =>
-              `font-medium transition ${
+              `w-full font-medium transition ${
                 isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
               }`
             }
@@ -130,7 +130,7 @@ const Navbar = () => {
             to="/shop"
             onClick={()=>setToggle(false)}
             className={({ isActive }) =>
-              `font-medium transition ${
+              `w-full font-medium transition ${
                 isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
               }`
             }
@@ -142,7 +142,7 @@ const Navbar = () => {
             to="/about"
             onClick={()=>setToggle(false)}
             className={({ isActive }) =>
-              `font-medium transition ${
+              `w-full font-medium transition ${
                 isActive ? "text-lime-400" : "text-zinc-500 hover:text-white"
               }`
             }

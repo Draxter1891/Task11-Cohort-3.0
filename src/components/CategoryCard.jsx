@@ -6,9 +6,10 @@ import {
   SoapDispenserDroplet,
 } from "lucide-react";
 
-const CategoryCard = ({ icon: Icon, name, totalProducts, hover }) => {
+const CategoryCard = ({ icon: Icon, name, totalProducts, hover, onClick }) => {
   return (
     <button
+      onClick={onClick}
       className={`
         group
         relative

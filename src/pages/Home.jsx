@@ -22,16 +22,18 @@ import StatCard from "../components/StatCard";
 import CategoryCard from "../components/CategoryCard";
 import { MyProducts } from "../context/ProductContext";
 import { nanoid } from "nanoid";
+import { MyCart } from "../context/CartContext";
 
 const Home = () => {
   const navigate = useNavigate();
   const { currentUser } = useContext(Auth);
-  const { products } = useContext(MyProducts);
+  const { products, updateFilters } = useContext(MyProducts);
+  const { cartProducts, cartTotal } = useContext(MyCart);
 
-  let categories = products.map((elem) => {
-    return elem.category;
-  });
-
+  let categories = products?.map((elem) => elem.category) ?? [];
+  let totalCartItems = cartProducts?.length ?? 0;
+  // console.log(totalCartItems);
+  const topProduct = products.find((elem) => elem.rating > 4.9);
   let categoryCount = [];
 
   let catClassify = {};
@@ -57,6 +59,10 @@ const Home = () => {
     groceries: Broccoli,
   };
 
+  const handleCategoryClick = (categoryName) => {
+    updateFilters({ category: categoryName, query: "", sort: "Featured" });
+    navigate("/shop");
+  };
   return (
     <div className="px-6 py-8">
       {/* Hero section */}
@@ -65,7 +71,7 @@ const Home = () => {
       <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
           icon={Package}
-          value={"0"}
+          value={totalCartItems}
           title={"Cart items"}
           subtitle={"In your bag"}
           bgColor={"bg-lime-500/20"}
@@ -73,7 +79,7 @@ const Home = () => {
         />
         <StatCard
           icon={TrendingUp}
-          value={`$0.00`}
+          value={`$${cartTotal.toFixed(2)}`}
           title={"Cart value"}
           subtitle={"Ready to checkout"}
           bgColor={"bg-blue-500/20"}
@@ -81,7 +87,7 @@ const Home = () => {
         />
         <StatCard
           icon={Star}
-          value={`$0.00`}
+          value={topProduct ? topProduct.title : "—"}
           title={"Top products"}
           subtitle={"Highly rated"}
           bgColor={"bg-yellow-800/20"}
@@ -89,7 +95,7 @@ const Home = () => {
         />
         <StatCard
           icon={Tag}
-          value={`$0.00`}
+          value={categoryCount.length}
           title={"Categories"}
           subtitle={"To explore"}
           bgColor={"bg-purple-500/20"}
@@ -115,6 +121,7 @@ const Home = () => {
               name={elem.name}
               totalProducts={elem.totalCount}
               hover={true}
+              onClick={() => handleCategoryClick(elem.name)}
             />
           ))}
         </div>

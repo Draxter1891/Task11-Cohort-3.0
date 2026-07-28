@@ -34,11 +34,11 @@ const StatCard = ({ icon: Icon, value, title, subtitle, bgColor, iconColor }) =>
 
       {/* Content */}
       <div className="space-y-1">
-        <h2 className="text-3xl font-bold leading-none text-white font-[clash]">{value}</h2>
+        <h2 className="w-full text-3xl font-bold leading-none text-white font-[clash] text-wrap">{value}</h2>
 
-        <h3 className="text-md font-medium text-zinc-400">{title}</h3>
+        <h3 className="text-md font-medium text-zinc-400 text-wrap">{title}</h3>
 
-        <p className="text-xs text-zinc-600">{subtitle}</p>
+        <p className="text-xs text-zinc-600 text-wrap">{subtitle}</p>
       </div>
     </div>
   );
